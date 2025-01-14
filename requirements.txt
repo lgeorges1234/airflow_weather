@@ -1,0 +1,7 @@
+requirements.txt
+
+pandas
+requests
+scikit-learn
+joblib
+python-dotenv
