@@ -1,3 +1,6 @@
 /logs
 .env
 /venv
+dags/**/__pycache__/
+*.py[cod]
+*$py.class
