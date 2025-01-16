@@ -1,0 +1,8 @@
+# Build the weather collection image
+docker build -t weather_collection:latest -f ~/airflow/docker/Dockerfile .
+
+# Build the weather processing image
+docker build -t weather_processing:latest -f ~/airflow/docker/Dockerfile .
+
+# Build the weather ML image
+docker build -t weather_ml:latest -f ~/airflow/docker/Dockerfile .

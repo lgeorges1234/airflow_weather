@@ -1,0 +1,50 @@
+flowchart TB
+    subgraph HOST["Host Machine"]
+        direction TB
+        H_DAGS["./dags/
+        weather_pipeline/tasks/
+        - data_collection.py
+        - data_transformation.py
+        - model_training.py"]
+        
+        H_APP["./app/
+        - raw_files/
+        - clean_data/"]
+        
+        H_DOCKER["./docker/
+        - Dockerfile
+        - tasks/requirements.txt"]
+    end
+
+    subgraph AIRFLOW["Airflow Container"]
+        direction TB
+        A_DAGS["/opt/airflow/dags/"]
+        A_APP["/app/"]
+    end
+
+    subgraph DOCKER_OP["Docker Tasks Containers"]
+        direction TB
+        D_SCRIPT["/opt/airflow/dags/
+        weather_pipeline/tasks/
+        (Python scripts)"]
+        D_APP["/app/
+        (Data storage)"]
+    end
+
+    H_DAGS -- "volume mount" --> A_DAGS
+    H_APP -- "volume mount" --> A_APP
+    
+    A_DAGS -- "volume mount" --> D_SCRIPT
+    A_APP -- "volume mount" --> D_APP
+    
+    H_DOCKER -- "build" --> IMAGES["Docker Images:
+    - weather_collection
+    - weather_processing
+    - weather_ml"]
+    
+    IMAGES -- "run" --> DOCKER_OP
+
+    style HOST fill:#f9f,stroke:#333
+    style AIRFLOW fill:#bbf,stroke:#333
+    style DOCKER_OP fill:#bfb,stroke:#333
+    style IMAGES fill:#ffb,stroke:#333

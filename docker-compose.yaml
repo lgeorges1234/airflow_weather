@@ -51,25 +51,22 @@ x-airflow-common: &airflow-common
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ""
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
-    AIRFLOW__CORE__LOAD_EXAMPLES: "true"
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
     AIRFLOW__API__AUTH_BACKEND: "airflow.api.auth.backend.basic_auth"
     AIRFLOW__SMTP__SMTP_HOST: "smtp.gmail.com"
     AIRFLOW__SMTP__SMTP_PORT: 587
     AIRFLOW__SMTP__SMTP_USER: "de.airflow@gmail.com"
     AIRFLOW__SMTP__SMTP_PASSWORD: "cfsrvkongsobheta"
     AIRFLOW__SMTP__SMTP_MAIL_FROM: "de.airflow@gmail.com"
+    AIRFLOW_VAR_OPENWEATHER_API_KEY: ${OPENWEATHER_API_KEY}
 
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- scikit-learn}
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
-    - type: bind
-      source: ./clean_data
-      target: /app/clean_data
-    - type: bind
-      source: ./raw_files
-      target: /app/raw_files
+    - /var/run/docker.sock:/var/run/docker.sock 
+    - ./app:/opt/airflow/app
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:
     redis:
@@ -166,10 +163,10 @@ services:
     image: datascientest/dashapp:1.0.0
     volumes:
       - type: bind
-        source: ./clean_data
+        source: ./app/clean_data
         target: /app/clean_data
       - type: bind
-        source: ./raw_files
+        source: ./app/raw_files
         target: /app/raw_files
     ports:
       - 8050:8050

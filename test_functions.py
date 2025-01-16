@@ -18,7 +18,7 @@ def test_data_collection():
     print("Testing data collection...")
     try:
         # You'll need to set these environment variables
-        os.environ['AIRFLOW_VAR_openweather_api_key']
+        os.environ['AIRFLOW_VAR_OPENWEATHER_API_KEY']
         os.environ['AIRFLOW_VAR_cities'] = '["paris", "london", "washington"]'
         
         result = collect_weather_data()
@@ -30,13 +30,16 @@ def test_data_transformation():
     """Test the data transformation functions"""
     print("\nTesting data transformation...")
     try:
-        recent_data = transform_recent_data()
-        print(f"Successfully transformed recent data: {recent_data}")
+        # Test transform_recent_data
+        recent_result = transform_recent_data()
+        print(f"Successfully transformed recent data: {recent_result}")
         
-        full_data = transform_full_data()
-        print(f"Successfully transformed full data: {full_data}")
+        # Test transform_full_data
+        full_result = transform_full_data()
+        print(f"Successfully transformed full data: {full_result}")
     except Exception as e:
         print(f"Error transforming data: {e}")
+        raise
 
 def test_model_training():
     """Test the model training functions"""
